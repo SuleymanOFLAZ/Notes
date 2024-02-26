@@ -1,0 +1,3 @@
+**Resource acquisition is initialization** (**RAII**) is a [programming idiom](https://en.wikipedia.org/wiki/Programming_idiom "Programming idiom" ) used in several [object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming "Object-oriented programming"), [statically typed](https://en.wikipedia.org/wiki/Statically-typed_programming_language "Statically-typed programming language") programming languages to describe a particular language behavior.
+
+A constructor is a function that used to initialize a class object and a destructor is function that used to destroy a class object. Using this method is RAII.

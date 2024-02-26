@@ -1,0 +1,15 @@
+{
+  "files": [
+    "tmp_warn.md",
+    "tmp_exmple.md",
+    "tmp_note.md",
+    "tmp_question.md",
+    "tmp_code_class.md",
+    "tmp_code.md",
+    "tmp_important.md"
+  ],
+  "templaterFiles": [],
+  "newFileTemplates": [],
+  "openNewFileTemplateInNewPane": true,
+  "useNewFileTemplateOnFileCreation": false
+}

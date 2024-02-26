@@ -1,0 +1,15 @@
+{
+  "delay": 41.6625,
+  "setDelayManually": false,
+  "showTextChordExecuted": false,
+  "showTemplateChordExecuted": true,
+  "showFileChordExecuted": false,
+  "showCommandChordExecuted": true,
+  "chords": [
+    {
+      "key": "ww",
+      "value": "templates/tmp_warn.md",
+      "chordType": 2
+    }
+  ]
+}
