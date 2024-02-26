@@ -733,7 +733,7 @@ int main()
 
 There are three well-known copy-elision techniques that are independent of the programming languages:
 
-1. The parameter of the function is of a class type and the function is called with an R-value value class object.
+1. The parameter of the function is of a class type (not reference or pointer) and the function is called with an R-value value class object.
 ```cpp
 class Myclass {
 public:
@@ -763,7 +763,7 @@ int main()
 ```
 The default constructor will be called for the temporary object. Then, the move constructor will be called if it exists, otherwise, the copy constructor will be called, because we pass the object to the function.
 
-However, only the default constructor will be called because of the copy elision. This is an optimization. However, this is also added to the language rules with C++17, thus it is a rule (not an optimization) now. The rule added with C++17 is called "**mandatory copy elision**". #Cpp17
+However, only the default constructor will be called because of the copy elision. This is an optimization. However, this is also added to the language rules with C++17, thus it is a rule (not an optimization) now. The rule added with C++17 is called "**mandatory copy elision**". #Cpp17 #Cpp_MandatoryCopyElision
 
 The following syntax is an error before C++17. We delete the copy constructor and pass an object as a parameter. However, it is not an error with C++17, because it is guaranteed that the copy or move constructor won't be called.
 ```cpp
@@ -784,7 +784,7 @@ void foo(Myclass)
 
 int main()
 {
-	foo(Myclass{}); // Syntax error before C++17, but ok after c++17.
+	foo(Myclass{}); // Copy Elision. Syntax error before C++17, but ok after c++17 because the copy ctor is deleted.
 }
 ```
 
@@ -815,9 +815,132 @@ int main()
 ```
 The copy constructor can be called. This is the worst possibility because of the copying cost.
 The move constructor can be called.
-The move or copy constructors won't be called (mandatory copy elision). Because we used a temporary object.
+The move or copy constructors won't be called (mandatory copy elision) because we used a temporary object.
 
 Should we use "T" instead of "const T&" as a parameter by trusting the mandatory copy elision? Mostly yes. In many cases, the "T" is preferred because of the move-semantic and the copy elision. #Cpp17
+
+2. The return value of the function is a class type and the return expression is a PR-value.
+```cpp
+class Myclass {
+public:
+	Myclass()
+	{
+		std::cout << "default ctor\n";
+	}
+	Myclass(const Myclass&) = delete;
+
+};
+
+Myclass foo()
+{
+	// code
+
+	return Myclass{};
+}
+
+int main()
+{
+	foo(); // RVO. Syntax error before C++17, but ok after c++17.
+	Myclass m = foo(); // RVO. Syntax error before C++17, but ok after c++17 because the copy ctor is deleted.
+}
+```
+Only the default constructor will be called. This is called "**return value optimization - (RVO)**" in general. This is become mandatory with C++17. #Cpp17 #Cpp_ReturnValueOptimization
+
+3. "**Named Return Value Optimization - NRVO**" is not mandatory, so if we delete the copy constructor, this will be a syntax error. The compilers make NRVO as long as there are no obstacles. We will look at these obstacles later. #Cpp_NRVO 
+```cpp
+class Myclass {
+public:
+	Myclass()
+	{
+		std::cout << "default ctor\n";
+	}
+	Myclass(const Myclass&) = delete;
+
+};
+
+Myclass foo()
+{
+	Myclass m;
+	/// Code
+
+	return m;
+}
+
+int main()
+{
+	Myclass c = foo(); // NRVO
+}
+```
+We create a local object and use it. Then we return the object. Normally, the default constructor and the copy constructor would be called. However, only the default constructor will be called due to NRVO. Note that, the existence of the copy constructor is mandatory (shouldn't be deleted) here because this is an optimization and does not exist in standards.
+Note that, the move constructor will be called instead of the copy constructor in the normal case in the upper example if the move constructor exists. So, it wouldn't be a syntax error if we delete the copy constructor in case the move constructor exists. But if the syntax requires the copy constructor (not the move constructor) and we delete it, it will be the syntax error.
+
+In conclusion, the NRVO depends on the compiler knowing the local variable address and creating the object directly at the address where the object is copied.
+
+Some Cases that NRVO can't Be Done
+- If a parameter of the function is used as the return, the NRVO can't be done. Because the same area can't be used for the parameter and the return. These are two different areas that are certain at before.
+```cpp
+Myclass func(Myclass x)
+{
+	// Code
+	
+	return x; // The NRVO can't be done.
+}
+```
+- If the object has a static life span, the NRVO can't done. Because a static object already has an area, it can't be the same as the object that the return is assigned.
+```cpp
+Myclass func()
+{
+	static Myclass x;
+	// Code
+	
+	return x; // The NRVO can't be done.
+}
+```
+- In case of multiple return statements, the NRVO can't done.
+```cpp
+Myclass func()
+{
+	Myclass x;
+
+	if (expr1)
+		return Myclass{};
+	if (expr2)
+		return x;
+}
+```
+
+## Temporary Materialization
+#Cpp_TemporaryMaterialization
+The standards define a situation named "temporary materialization". The compiler generates code to create a class object based on an expression in the form of a PR value expression. When does this occur? If we bind an R-value expression to an R-value reference.
+```cpp
+Myclass&& r = Myclass{}; // Temporary materialization
+const Myclass& r = Myclass{}; // Temporary materialization
+```
+Actually, the standards don't consider a PR-value expression as a temporary object. PR-value expression is an expression that can provide the creation of an object. But it is not the object itself with the C++17 standards. However, the compiler generates a code that creates an object that makes the PR-value expression an object in certain situations depending on the temporary materialization rules. #Cpp17
+
+C++17 standards say a PR-value expression turns into an object only in case of temporary materialization. So a temporary object isn't created with the initialization syntax. The "mandatory copy elision" is a wrong name because there is no temporary object (temporary materialization) here. #Cpp17
+
+```cpp
+Myclass x = Myclass{}; // No temporary materialization
+```
+Normally we expect that the default constructor will be called for the temporary object then the copy constructor called for the x. However regarding the C++17 standards, although we use the "mandatory copy elision" term, there is no copy operation here because there is no object here. The R-value expression isn't done as a temporary materialization because it is used to initialize an object. Thus the variable x is directly become to the life with the default constructor. This is not an optimization, a rule of the language. This is valid even in the below code.
+```cpp
+Myclass x = Myclass{ Myclass{ Myclass{} } }; // No temporary materialization
+```
+Only one default constructor is called for upper syntax because there is only one object that is become to the life. Or this is valid in the below code too.
+```cpp
+Myclass foo()
+{
+	return Myclass{};
+}
+
+int main()
+{
+	Myclass x = Myclass{ Myclass{ foo() } }; // No temporary materialization
+}
+```
+
+In conclusion, regarding the C++17 standard, a PR-value expression is not a class object itself, it is like information that is used to bring a class object to life. However, a PR-value expression is used to create an object by the compiler in some cases depending on the temporary materialization rule. One situation is binding the PR-value expression to a reference (an R-value reference or a const L-value reference). Also, there are more situations but we will mention these later.
 # Small Buffer Optimization - SBO
 #Cpp_SmallBufferOptimization
 Does the string class make allocation at the heap? 
@@ -875,12 +998,45 @@ int main()
 ```
 
 # Object Swap Example
-The "Biggie" is a big (as size) class and uses the move-semantic.
-```cpp
+The "Biggie" is a big (as size) class and uses the move-semantic. So, there are significant differences between copying and moving the biggie object.
 
+```cpp
+class Biggie {
+public:
+	//
+};
+
+void bswap(Biggie& b1, Biggie& b2)
+{
+	Biggie temp = std::move(b1); // move constructor
+	b1 = std::(b2); // move assignment 
+	b2 = std::(temp); // move assignment
+}
+
+/* DON'T DO THIS, (very costly)
+
+void bswap(Biggie& b1, Biggie& b2)
+{
+	Biggie temp = b1; // copy constructor
+	b1 = b2; // copy assignment
+	b2 = temp; // copy assignment 
+}
+*/
+
+int main()
+{
+	Biggie x, y;
+
+	bswap(x, y);
+}
 ```
 
-AT: 02:52
+Consider we have a function to swap two Biggie objects. We have to use the "move" function inside the swap function to make the swap operation efficient. When we use the "move" on an abject, the object becomes moved-from stare. The upper example is valid because the moved-from state object is valid.
+
+No need to write a function like this. Because "swap" is a function template in the STL.
+```cpp
+std::swap(x, y);
+```
 
 ---
 # Terms
@@ -898,6 +1054,7 @@ AT: 02:52
 - mandatory copy elision
 - small buffer optimization - SBO
 - string buffer optimization
+- return value optimization - RVO
 
 ---
 Return: [[00_Course_Files]]
