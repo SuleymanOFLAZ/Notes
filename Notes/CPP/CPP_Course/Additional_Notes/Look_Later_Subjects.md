@@ -36,3 +36,5 @@
 - inline variables (cpp17)
 - Where we use private constructors
 - Small Buffer Optimization - SBO
+- tool to use bool as 1 bit
+- Type categorization in C++ (For ex aggregate types)

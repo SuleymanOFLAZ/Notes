@@ -2,26 +2,26 @@
 #Cpp_Course
 # Reference Semantics
 #Cpp_ReferenceSemantic
-There is an alternative semantic to pointer semantics named <mark style="background: #BBFABBA6;">reference semantic</mark> in C++. This is a language layer tool. Compiler generates same assembly code as like as we use pointer semantic most of the time. Small differences can be depending on optimization level.
+There is an alternative semantic to pointer semantics named **reference semantic** in C++. This is a language layer tool. The compiler generates the same assembly code as we use pointer semantics most of the time. Small differences can depend on the optimization level.
 
-Reason to add reference semantic to the language is that pointer semantic not compatible with other language features like <mark style="background: #BBFABBA6;">operator overloading</mark>.
+The reason to add reference semantics to the language is that pointer semantics are not compatible with other language features like **operator overloading**.
 
-References was has been existed before modern C++. This was only called "reference". When <mark style="background: #BBFABBA6;">move semantics</mark> and <mark style="background: #BBFABBA6;">perfect forwarding</mark> tools were move in with modern C++, the "reference" concept is expanded and divided into two category, Old "reference" is called "<mark style="background: #BBFABBA6;">L value reference</mark>" and  "<mark style="background: #BBFABBA6;">R value reference</mark>" is added.
+References were has existed before modern C++. This was only called "reference". When **move semantics** and **perfect forwarding** tools were moved in with modern C++, the "reference" concept was expanded and divided into two categories, Old "reference" is called "**L value reference**" and  "**R value reference**" is added. #Cpp11
 
-Why R value references added to the language? Modern C++ (C++11 and later) added various tool to the language. Some of these tools are very effected the language. These are move semantics, perfect forwarding, lambda expressions etc. R value references added to support these features.
+Why are R-value references added to the language? Modern C++ (C++11 and later) added various tools to the language. Some of these tools are very affected the language. These are move semantics, perfect forwarding, lambda expressions, etc. R-value references are added to support these features.
 
-> In conclusion there are two reference concept in C++:
-> 1. L value reference
-> 2. R value reference
+> In conclusion there are two reference concepts in C++:
+> 1. L-value reference
+> 2. R-value reference
 
-Now L value references are mentioned. We will look to R value reference later.
+Now L value references are mentioned. We will look at the R-value reference later.
 
 > [!note] Note: Compiler Explorer
-<mark style="background: #FFB86CA6;">godbolt.org</mark> is a web site that shows assembly code of given code.
+**godbolt.org** is a website that shows the assembly code of a given code.
 
 # Value Category
 #Cpp_ValueCategory
-Value category: Qualification of an expression. That means <mark style="background: #ADCCFFA6;">int x;</mark> not has a value category. Value category qualify an expression like: <mark style="background: #ADCCFFA6;">x, 10, x+5, a[3], *ptr</mark>. There is no concept like value category of an declared variable. Date type and value category are different concepts. <mark style="background: #FFF3A3A6;">Value category describes which contexts is an expression can be used as legal and which situation is that expression be subjected to certain conversion operations</mark>. When we describe an expression's value category, we can determine the other tools of the language how reacts that expression and is there a syntax error or how to make inferences like similar situations.
+Value category is the qualification of an expression. That means <mark style="background: #ADCCFFA6;">int x;</mark> not has a value category. Value category qualify an expression like: <mark style="background: #ADCCFFA6;">x, 10, x+5, a[3], *ptr</mark>. There is no concept like value category of an declared variable. Date type and value category are different concepts. <mark style="background: #FFF3A3A6;">Value category describes which contexts is an expression can be used as legal and which situation is that expression be subjected to certain conversion operations</mark>. When we describe an expression's value category, we can determine the other tools of the language how reacts that expression and is there a syntax error or how to make inferences like similar situations.
 
 Value categorization is differs between C and C++ and this makes it more complex. In C, an expression can be a L value expression or can be an R value expression. L value means that the expression corresponds an object and has a area on memory and we can access that area. We can test that with address of operator. If we can use address operator on the expression than it is a L value reference, and in the other way it is a R value reference.
 

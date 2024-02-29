@@ -4,22 +4,23 @@
     "type": "split",
     "children": [
       {
-        "id": "36d3d717dffab49e",
+        "id": "cbcbe52b3194f572",
         "type": "tabs",
         "children": [
           {
-            "id": "d7b9ae9afdc2a372",
+            "id": "b09cb40e71c852a9",
             "type": "leaf",
             "state": {
-              "type": "diff-view",
+              "type": "markdown",
               "state": {
-                "file": ".DS_Store",
-                "staged": false
+                "file": "CPP/CPP_Course/03_CPP_Course.md",
+                "mode": "source",
+                "source": false
               }
             }
           },
           {
-            "id": "3da3ee98708ea6c6",
+            "id": "473d38822268693a",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -59,7 +60,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#Cpp_keyword_default",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -96,6 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "CPP/CPP_Course/03_CPP_Course.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,6 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "CPP/CPP_Course/03_CPP_Course.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -133,7 +136,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "CPP/CPP_Course/03_CPP_Course.md"
+              }
             }
           },
           {
@@ -143,9 +148,17 @@
               "type": "git-view",
               "state": {}
             }
+          },
+          {
+            "id": "5c963e896f99e144",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
@@ -166,13 +179,24 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "d7b9ae9afdc2a372",
+  "active": "b09cb40e71c852a9",
   "lastOpenFiles": [
-    "CPP/CPP_Course/10_CPP_Course.md",
+    "CPP/CPP_Course/02_CPP_Course.md",
+    "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
     "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
+    "CPP/Home.md",
+    "CPP/CPP_Course/01_CPP_Course.md",
+    "CPP/CPP_Topics/Drawings/001_AnatomyOfVector.md",
+    "CPP/CPP_Topics/Drawings/002_VectorCopy.md",
+    "CPP/CPP_Course/00_Course_Files.md",
+    "CPP/CPP_Course/10_CPP_Course.md",
+    "CPP/CPP_Course/11_CPP_Course.md",
+    "CPP/CPP_Topics/Everything You Ever Wanted To Know About Move Semantics.md",
+    "CPP/CPP_Topics/Drawings/003_VectorMove.md",
+    "CPP/CPP_Topics/RAII (Resource Acquisition Is Initialization).md",
+    "CPP/CPP_Topics/Drawings",
     "CPP/CPP_Course/09_CPP_Course.md",
     "CPP/CPP_Course/08_CPP_Course.md",
-    "CPP/Home.md",
     "CPP_Course/09_CPP_Course.md",
     "CPP_Course/10_CPP_Course.md",
     "Excalidraw/001_statesOfSMF.md",
@@ -185,16 +209,6 @@
     "Untitled.md",
     "CPP_Course/08_CPP_Course.md",
     "CPP_Topics/RAII (Resource Acquisition Is Initialization).md",
-    "CPP_Course/07_CPP_Course.md",
-    "CPP_Course/06_CPP_Course.md",
-    "templates/tmp_important.md",
-    "templates/tmp_code_class.md",
-    "templates/tmp_exmple.md",
-    "CPP_Course/05_CPP_Course.md",
-    "Untitled 1.md",
-    "CPP_Course/03_CPP_Course.md",
-    "CPP_Course/04_CPP_Course.md",
-    "CPP_Course/01_CPP_Course.md",
     "Images/CppValueCategories.png",
     "Images",
     "Untitled.canvas",
@@ -204,7 +218,6 @@
     "Interview Qustions",
     "CPP_Topics",
     "CPP_Course",
-    "templates",
-    "Programming/Sort Algorithms"
+    "templates"
   ]
 }
