@@ -21,18 +21,18 @@ Now L value references are mentioned. We will look at the R-value reference late
 
 # Value Category
 #Cpp_ValueCategory
-Value category is the qualification of an expression. That means <mark style="background: #ADCCFFA6;">int x;</mark> not has a value category. Value category qualify an expression like: <mark style="background: #ADCCFFA6;">x, 10, x+5, a[3], *ptr</mark>. There is no concept like value category of an declared variable. Date type and value category are different concepts. <mark style="background: #FFF3A3A6;">Value category describes which contexts is an expression can be used as legal and which situation is that expression be subjected to certain conversion operations</mark>. When we describe an expression's value category, we can determine the other tools of the language how reacts that expression and is there a syntax error or how to make inferences like similar situations.
+Value category is the qualification of an expression. That means, "int x;" does not have a value category. Value category qualifies expressions like: "x, 10, x+5, a\[3], \*ptr". There is no concept like the value category of a declared variable. Data type and value category are different concepts. Value category describes which contexts an expression can be used as legal and which situation is that expression be subjected to certain conversion operations. When we describe an expression's value category, we can determine how the other tools of the language react to that expression and whether is there a syntax error or how to make inferences in similar situations.
 
-Value categorization is differs between C and C++ and this makes it more complex. In C, an expression can be a L value expression or can be an R value expression. L value means that the expression corresponds an object and has a area on memory and we can access that area. We can test that with address of operator. If we can use address operator on the expression than it is a L value reference, and in the other way it is a R value reference.
+Value categorization differs between C and C++ and this makes it more complex. In C, an expression can be an L-value expression or can be an R-value expression. L value means that the expression corresponds to an object and has an area on memory and we can access that area. We can test that with the address-of-operator. If we can use the address operator on the expression then it is an L-value reference, and in the other way, it is an R-value reference.
 
-But in C++, this is not that simple. Value category of an C expression may not be same as value category of C++. In modern C++, there are three value categories, and there are called <mark style="background: #BBFABBA6;">primary value categories</mark>.
+But in C++, this is not that simple. The value category of a C expression may not be the same as the value category of C++. In modern C++, there are three value categories, and they are called **primary value categories**.
 
 > Primary value categories are:
-> 1. <mark style="background: #BBFABBA6;">L value</mark>
-> 2. <mark style="background: #BBFABBA6;">PR value</mark>
-> 3. <mark style="background: #BBFABBA6;">X value</mark>
+> 1. **L value**
+> 2. **PR value**
+> 3. **X value**
 
-<mark style="background: #FFF3A3A6;">An expression can be belong to only one of the primary category in same time.</mark>. 
+An expression can belong to only one of the primary categories at the same time.
 For example:
 ```cpp
 x // L value
@@ -43,27 +43,37 @@ int&& foo();
 foo() // X value
 ```
 
-- L value: It was has been came from "left value". But after, it has been evaluated to "locators value".
-- PR value: pure R value.
+- L value: It has come from the "left value". But after, it has been evaluated to "locators value".
+- PR value: pure R-value.
 - X value: expiring value
 
-There are <mark style="background: #BBFABBA6;">composite value categories</mark> too. There are:
-- <mark style="background: #BBFABBA6;">GL value</mark>: L value and X value combination set is GL value. Generalized L value.
-- <mark style="background: #BBFABBA6;">R value</mark>: PR value and X value combination set is R value. 
-![[CppValueCategories.png]]
+There are composite value categories too. There are:
+- **GL value**: L value and X value combination set is GL value. Generalized L value.
+- **R value**: PR value and X value combination set is R value. 
+![[CppValueCategories.png|700]]
 
-![[Value_Category]]
+![[Value_Category|700]]
 
 # L value references
 #Cpp_LvalueReference
-An reference is a name that replaces an object. L value reference:
+A reference is a name that replaces an object. L value reference:
 ```cpp
 int x = 20;
 int &r = x; // L value reverence
 
 ++r;
 ```
-That means r is a reference to x. r means x. That means there are no two abject names x and r. There only one object that is x and r means x. & is not an operator here, & is a <mark style="background: #BBFABBA6;">declarator</mark>. For example:
+
+We bind r to x.
+The example corresponds to the following pointer syntax:
+```cpp
+int x = 20;
+int* const ptr = &x;
+
+++(*ptr);
+```
+
+That means r is a reference to x. r means x. That means there are no two objects. There is only one object and, x and r means x. & is not an operator here, & is a **declarator**. For example:
 ```cpp
  r = 90; // we used x
  &r // we take the reference
@@ -76,20 +86,11 @@ int& r =x; // Here, & is a declerator
 int* p = &r; // Here, * is a declerator but & is a operator (address of) 
 ```
 
-We bind r to x.
-Example corresponds following syntax:
-```cpp
-int x = 20;
-int* const ptr = &x;
+That makes it easier to write and ensures compliance with C++ tools like operator overloading.
 
-++(*ptr);
-```
+L value references can't point to another object after the initial value. That means L value references correspond to const top-level pointers and means the address that  L value references hold can't be changed.
 
-That make easier to writing and ensures the compliance with C++ tools like operator overloading.
-
-L value references can't point to another object after initial value. That means L value references corresponds to const top level pointers and means address that  L value references pointed can't be changed.
-
-All initialize methods can be used with  L value reference syntax. (<mark style="background: #FFF3A3A6;">Except default initialization</mark>) For example:
+All initialize methods can be used with  L value reference except default initialization. For example:
 ```cpp
 #include ‹iostream>
 
@@ -102,19 +103,18 @@ int main()
 }
 ```
 
-> [!note] Note
-<mark style="background: #FFB8EBA6;">Additional information</mark>: There is another name of the heap in C++, that is <mark style="background: #BBFABBA6;">free store</mark>.
+> [!note] Note: There is another name for the heap in C++, which is **free store**.
 
 Let's look at some legal and illegal (syntax error) situations:
-1. <mark style="background: #FFF3A3A6;">References must be initialized</mark>. That means references cannot be default initialized. For example:
+1. References must be initialized. That means references cannot be default initialized. For example:
 ```cpp
 int main()  
 {  
-	int& x; // Syntax error, a reference must be initialied
+	int& x; // Syntax error, a reference must be initialized
 }
 ```
 
-2. <mark style="background: #FFF3A3A6;">We must initialize a r value reference with same type of the object.</mark>. If we violate that rule, that would be a syntax error. Note that, this is same with the pointer semantic in C++, but in C that differs. For example:
+2. We must initialize an r-value reference with the same type of object. If we violate that rule, that would be a syntax error. Note that, this is the same with the pointer semantic in C++, but in C that differs. For example:
 ```cpp
 int main()
 {
@@ -123,16 +123,16 @@ int main()
 }
 ```
 
-3. <mark style="background: #FFF3A3A6;">We cannot initialize L value references with R value references</mark>. For example:
+3. We cannot initialize L-value references with R-value references. For example:
 ```cpp
 int main()  
 {  
 	unsigned int x = 10;  
-	int& r = 10;  // Syntax error, we cannot initialize with a R value
+	int& r = 10;  // Syntax error, we cannot initialize with a R-value
 }
 ```
 
-4. Following syntaxes are legal to use:
+4. The following syntaxes are legal to use:
 ```cpp
 int main()
 {
@@ -143,7 +143,7 @@ int main()
 }
 ```
 
-5. And also followings is legal:
+5. And also following is legal:
 ```cpp
 int main()
 {
@@ -155,7 +155,7 @@ int main()
 ｝
 ```
 
-Look for following:
+Look for the following:
 ```cpp
 int main()
 {
@@ -169,16 +169,16 @@ int main()
 }
 ```
 
-<mark style="background: #FFF3A3A6;">There is no reference to reference as similar to pointer to pointer</mark>. For example:
+There is no reference to reference as similar to pointer to pointer. For example:
 ```cpp
 int main()
 {
-	// Classical pointer to ponter syntax
+	// Classical pointer to pointer syntax
 	int x = 10;
 	int* p = &x;
 	int** ptr = &p;
 
-	// Followings syntax doesn't corresponds to pointer to pointer
+	// Followings syntax doesn't correspond to pointer to pointer
 	int x = 10;
 	int& r1 = x;
 	int& r2 = r1; // r2 is same as r1
@@ -186,27 +186,26 @@ int main()
 }
 ```
 
-<mark style="background: #FFF3A3A6;">Question: Can we take a reference to an array?</mark> The answer is yes, but first let's look how would we take a pointer to an array. Pointer to an array is different from pointer to an array member. For example:
+Question: Can we take a reference to an array? The answer is yes, but first, let's look at how could we take a pointer to an array. A pointer to an array is different from a pointer to an array member. For example:
 ```cpp
 int main()
 {
-	// Pointer to an array
 	int ar[] = {2, 5, 6, 9 };
-	int(*p)[4] = &ar;
+	int(*p)[4] = &ar; // Pointer to an array
 }
 ```
 
-Same as pointer to an array, reference to an array is possible:
+Same as a pointer to an array, reference to an array is possible:
 ```Cpp
 int main()
 {
-	// Reference to an array
-	int(&r)[4] = ar;
+	int ar[] = {2, 5, 6, 9 };
+	int(&r)[4] = ar; // Reference to an array
 	r[2] = 34; // OK
 	int *ptr = r; // OK, array decay
 }
 ```
-But upper there is less complex syntax that corresponds upper syntax. We can benefit of type deduction and we can write it like following:
+However, there is less complex syntax that corresponds to upper syntax. We can benefit from type deduction and we can write it like the following:
 ```cpp
 int main()
 {
@@ -217,7 +216,7 @@ int main()
 ｝
 ```
 
-## Function that has reference argument
+## The Function That Has Reference Argument
 
  ```cpp
  #include <iostream>
@@ -231,16 +230,16 @@ int main()
 {
 	int ival{ 3 };
 	
-	sta:: cout << "ival= " « ival « "\n";
+	sta:: cout << "ival= " « ival « "\n"; // It prints 3
 	
 	func(ival);
-	std:: cout << "ival = " « ival « "\n";
+	std:: cout << "ival = " « ival « "\n"; // It prints 999
 ｝
 ```
 
-<mark style="background: #FFF3A3A6;">Keep caution</mark> on that; we cannot determine that the <mark style="background: #ADCCFFA6;">func(ival);</mark> can be changed the arguments or not without showing func's definition in C++. In C, we can say it if the function is call-by-value or call-by-reference by seeings the function call. But in C++, because of the reference semantic we cannot say that and we must see the function implementation to say if the function can change the passed argument or not.
+Keep caution on that; we cannot determine whether the "func(ival);" can change the arguments or not without showing func's definition (which means only looking at the function call) in C++. In C, we can say if the function is call-by-value or call-by-reference by seeing the function call. But in C++, because of the reference semantic we cannot say that and we must see the function implementation to say if the function can change the passed argument or not.
 
-<mark style="background: #FFF3A3A6;">Important: Function call expression that the function return type is a L value reference is a L value expression in C++ language.</mark>  That means the function call expression to <mark style="background: #D2B3FFA6;">int& foo();</mark> is a L value expression but, the function call expression to <mark style="background: #D2B3FFA6;">int foo();</mark> is a PR value expression. For example the function call <mark style="background: #D2B3FFA6;">foo();</mark> is a L value expression in below code, because the function returns an L value reference:
+Important: Function call expression that the function return type is an L-value reference is an L-value expression in C++ language.  That means the function call expression to "int& foo();" is an L-value expression but, the function call expression to "int foo();" is a PR value expression. For example, the function call "foo();" is an L-value expression in the below code, because the function returns an L-value reference:
 ```cpp
 #include <iostream>
 
@@ -262,10 +261,10 @@ int main()
 }
 ```
 
-Since <mark style="background: #D2B3FFA6;">int& foo()</mark> is a L value expression ve can assign it to a L value reference.
-And we can use function <mark style="background: #D2B3FFA6;">foo();</mark> call at a left side of the assignment operator: <mark style="background: #D2B3FFA6;">foo() = 999;</mark>. 
+Since "int& foo()" is an L-value expression we can assign it to an L-value reference.
+And we can use the "foo();" call at the left side of the assignment operator: "foo() = 999;". 
 
-<mark style="background: #FFF3A3A6;">Keep caution</mark> on that: In expression <mark style="background: #ADCCFFA6;">int x = foo();</mark> , x not means g. So x not changes the g and it is a different object. But with syntax <mark style="background: #ADCCFFA6;">int& r = foo();</mark> , r means g.
+Keep caution on that, In the expression "int x = foo();", the "x" does not mean the "g". So the "x" does not change the "g" and it is a different object. But with the syntax "int& r = foo();", the "r" means the "g".
 
 Pointer semantic example is in below:
 ```cpp
@@ -294,7 +293,7 @@ int main()
 ```
 
 > [!note] Note: Array Decay
-<mark style="background: #FFB8EBA6;">Additional Information</mark>: <mark style="background: #BBFABBA6;">Array decay</mark>.
+> The below code is an array decay example.
 
 ```c
 int main()  
@@ -309,11 +308,11 @@ int main()
 ```
 
 ## Const L Value Reference
-If we want to use an L reference to only access, we use const L value reference. we use const keyword to do that.
+If we want to use an L reference to only access, we use a const L-value reference. We use the const keyword to do that.
 
-Remember, L value references are not re-bindable. That means L value references must be initialize a value and they are same as const top level pointer. But if we want to make them as low-level const pointer ve use "const reference". By making a L value reference const, we cannot change the value that the reference is refers to. That is called "const L value reference".
+Remember, L-value references are not re-bindable. That means L-value references must be initialized and they are the same as a const top-level pointer. But if we want to make them as low-level const pointers we use "const reference". By making an L-value reference const, we cannot change the value that the reference refers to. That is called "const L-value reference".
 
-<mark style="background: #BBFABBA6;">Const correctness</mark> is determines the code quality and it is very important.
+**Const correctness** determines the code quality and it is very important.
 ```cpp
 #include <iostream>
 
@@ -340,13 +339,13 @@ const int& r = x; // OK
 int const &rr = x: // OK
 ```
 
-Top level "const" keyword can be used with references, but there is no meaning of using it because of already a reference is top level const. That means a reference is not re-bindable. For example:
+The top-level "const" keyword can be used with references, but there is no meaning in using it because of already a reference is a top-level const. That means a reference is not re-bindable. For example:
 ```cpp
-int & const ref = x; // OK, but there is no meaning of it. It is same as int &ref = x;
+int & const ref = x; // OK, but there is no meaning to it. It is the same as int &ref = x;
 ```
 
 > [!note] Note: Strict Aliasing Rule
-> Rules of address types conversions. There are some legal rules. For example conversion to char* is legal both in C and C++ (with type conversion operator).
+> Rules of address type conversions. There are some legal rules. For example, conversion to char* is legal both in C and C++ (with type conversion operator).
 > #Cpp_StrictAliasingRule
 
 ```c
@@ -357,7 +356,7 @@ int main()
 }
 ```
 
-<mark style="background: #FFF3A3A6;">Normally reference type conversion isn't legal in C++. But if the reference type is a const type, type conversion becomes legal</mark>. For example:
+Normally reference type conversion isn't legal in C++. But if the reference type is a const type, type conversion becomes legal. For example:
 ```cpp
 int main()
 {
@@ -367,9 +366,9 @@ int main()
 	const double& r = x; // This is legal
 }
 ```
-But how r replaces an another type in upper example? The answer is it doesn't, <mark style="background: #FFF3A3A6;">r replaces a double objects that generated by compiler</mark>. The compiler generates an temporary object with same type of the reference, than assign the value to it and links our reference to that temporary object. And the lifespan of this temporary objects last in scope of the reference's scope. This can be done because it is possible to implicit (automatic) type conversion from int to double. If it is not possible, than that doesn't work and that means syntax error.
+But how does the "r" replace another type in the upper example? The answer is it doesn't, the "r" replaces a double object that is generated by the compiler. The compiler generates a temporary object with the same type of the reference, then assigns the value to it and links our reference to that temporary object. The lifespan of this temporary object lasts in the scope of the reference's scope. This can be done because it is possible to implicit (automatic) type conversion from int to double. If it is not possible, then that doesn't work and that means syntax error.
 
-The objects that not existed in source code but compiler generated is named <mark style="background: #BBFABBA6;">temporary object</mark>. This is a important topic of the C++. The compiler generated code is like following:
+The objects that do not exist in the source code but are compiler-generated are named **temporary objects**. This is an important topic of C++. The compiler-generated code is like the following: #Cpp_TemporaryObject 
 ```cpp
 int main()
 {
@@ -377,21 +376,21 @@ int main()
 	
 	// double& r = x; // This is not legal
 	const double& r = x; // This is legal
-	/******  Following syntax represents the compiler generated code *******/
+	/******  The following syntax represents the compiler-generated code *******/
 	{
 		const double temp = x;
-		const double& r = temp;
+		const The f& r = temp;
 	}
 	/******  End of representation *******/
 }
 ```
 
-<mark style="background: #FFF3A3A6;">what would be if we assign an R value to a const L value reference? This wouldn't be a syntax error</mark>. Because like the upper description the compiler creates a temporary object for that R value and assign out cont L value reference to it. For example:
+what would be if we assign an R-value to a const L value reference? This wouldn't be a syntax error. Because like the upper description, the compiler creates a temporary object for that R-value and assigns out const L value reference to it. For example:
 ```cpp
 int main()
 {
 	const int& r = 5;
-	/******  Following syntax represents the compiler generated code *******/
+	/****** The following syntax represents the compiler-generated code *******/
 	{
 		const int temp = 5;
 		const int& r = temp;
@@ -400,18 +399,18 @@ int main()
 }
 ```
 
-What that mean in practically? This means we can call the function <mark style="background: #D2B3FFA6;">void foo(T &);</mark> with only L value category expression arguments. <mark style="background: #FFF3A3A6;">Bu we can call the function <mark style="background: #D2B3FFA6;">void foo(const T &);</mark> with the L value category expression arguments and also R value category expression arguments.</mark> 
+What does that mean practically? This means we can call the function "void foo(T &);" with only L value category expression arguments. But, we can call the function "void foo(const T &);" with the L-value category expression arguments and also R-value category expression arguments. #Cpp_ConstOverloading #Cpp_TemporaryObject 
 ## Pointer semantics vs reference semantics
-Most of the time pointer semantics and reference semantics are alternative each other. But sometimes we cannot use one of them instead of other.
+Most of the time pointer semantics and reference semantics are alternative to each other. But sometimes we cannot use one of them instead of the other.
 
-> 1. There is pointer to pointer but there is no reference to reference.
-> 2. pointer array is possible but reference array is not possible. There is no such an  array that its members are references. But this need solved with <mark style="background: #BBFABBA6;">std::reference_wrapper</mark> class of C++ standard library. We will loot it later.
+> 1. There is pointer-to-pointer but there is no reference-to-reference.
+> 2. A pointer array is possible but a reference array is not possible. There is no such an array that its members are references. But this can be solved with the **std::reference_wrapper** class of the C++ standard library. We will loot it later. #Cpp_std_wrapper
 > 3. There is nullptr, but there is no null reference. This means if we use nullptr with pointers there is no corresponding here to references.
-> 4. We can assign another address to a pointer, if the pointer is not top level const pointer. But we cannot change a reference. That means references is not <mark style="background: #BBFABBA6;">rebindable</mark>. Bu we can use std::reference_wrapper object instead of that.
-> 5. A reference is corresponds the top level const pointer. Because the references must be initialized and we cannot change where it points later on.
-> 6. Pointers can be default initialized but references not.
+> 4. We can assign another address to a pointer if the pointer is not a top-level const pointer. But we cannot change a reference. That means references are not re-bindable. But, we can use std::reference_wrapper object instead of that. #Cpp_std_wrapper
+> 5. A reference corresponds to the top-level const pointer. Because the references must be initialized and we cannot change where they point later on.
+> 6. Pointers can be default initialized but references are not.
 
-Let expanse upper bullets little bit:
+Let's expand the upper bullets a little bit:
 1. Let's look pointer to pointer example:
 ```cpp
 // Pointer swap example
@@ -432,7 +431,7 @@ int main
 }
 ```
 
-And let look the reference semantic of same code. There is no reference to reference here:
+And let's look at the reference semantics of the same code. There is no reference to reference here:
 ```cpp
 void pswap(int* &r1, int* &r2)
 {
@@ -451,59 +450,59 @@ int main
 }
 ```
 
-2. Below code is for pointer array example:
+2. The Below code is for the pointer array example:
 ```cpp
 int main()
 {
 	int* p[10]; // An pointer array
 
-	// there is no alternative of upper code with references
+	//There is no alternative to upper code with references
 	int &r[3]; // Syntax error
 }
 ```
 
 3. Where nullptr or NULL is used?
-1. address returning function like <mark style="background: #D2B3FFA6;">FILE* fopen():</mark>. returns NULL in case of failure. Or malloc() is same. This kind return a address of the object in case of success, other way it return NULL. Also same system functions or 3rd party codes uses this approach. There is no corresponding approach to that method with reference semantic, because of there is no null reference.
-2. NULL is used frequently in search functions. They return the address of the objects if it founds and NULL if it is not found.
-3. NULL function argument can be used to give an option to the caller. For example a function takes an pointer argument and if the value of the pointer is NULL, the function makes different operation. For example <mark style="background: #D2B3FFA6;">fflush()</mark>, if we give it a file object address, the function flashes the file's buffer; but if we give it NULL, the function flashes the all open files buffer. 
+1. address returning function like "FILE* fopen();". returns NULL in case of failure. Or malloc() is the same. This kind returns an address of the object in case of success, the other way it returns NULL. Also, the same system functions or 3rd party codes use this approach. There is no corresponding approach to that method with reference semantics because there is no null reference.
+2. NULL is used frequently in search functions. They return the address of the objects if it is founds and NULL if it is not found.
+3. A NULL function argument can be used to give an option to the caller. For example, a function takes a pointer argument and if the value of the pointer is NULL, the function makes a different operation. For example, for "fflush()", if we give it a file object address, the function flashes the file's buffer; but if we give it NULL, the function flashes the all open files buffer. 
 
-In upper cases or similar cases that NULL is used, we cannot use references. In this cases we use pointers. Or we can use alternative tools of C++ such as <mark style="background: #BBFABBA6;">std::optional</mark>.
+In upper cases or similar cases where NULL is used, we cannot use references. In this case, we use pointers. Or we can use alternative tools of C++ such as **std::optional**. #Cpp_std_optional
 
-<mark style="background: #FFF3A3A6;">We can declare function reference like function pointers</mark>. For example:
+We can declare function references like function pointers. For example:
 ```cpp
 int foo(int);
 
 int main()  
 {  
-	int (*fp)(int) = foo;  
-	int (&fpr)(int) = foo;
+	int (*fp)(int) = foo; // Function pointer
+	int (&fpr)(int) = foo; // Function reference
 }
 ```
 
-# R Value Reference
-Now we will briefly mention about R value references. We will mention it later in detail with move semantics and perfect forwarding. R value references came with modern C++.
+# R-Value Reference
+Now we will briefly mention R-value references. We will mention it later in detail with move semantics and perfect forwarding. R-value references came with modern C++. #Cpp11
 - We can initialize L value references with L value expressions.
 - We can initialize R value references with R value expressions.
 - We can initialize const  L value references with both L value expressions and R value expressions.
 - An R value reference must be initialized. (Same as L value reference)
-R value references can be created with <mark style="background: #FFF3A3A6;">&& declarator</mark>.
+R value references can be created with **&& declarator**.
 ```cpp
 int&& r = 10; // r is a R value reference
 ```
-<mark style="background: #FFF3A3A6;">R value references must be initialized with an R value expression. If we try to initialize it with an L value expression, it would be a syntax error.</mark>
+R value references must be initialized with an R value expression. If we try to initialize it with an L value expression, it would be a syntax error.
 
 # Expression's Value Category
 #Cpp_ValueCategory 
-Which expression is L value and which expression is R value:
-1. If an expression is exist of an variable name than it is a L value (only name).
-2. Literal expressions is PR value.
-3. If an expression consist of arithmetic operator, than it is a PR value.
-4. Some expression that created with same operators are L value. Front ++ operator is one of them. For example ++x is a L value. But X++ is a PR value. It is same with -- operator.
-5. Expression that created with comma if right expression of the coma is L value that the expression is a L value
+Which expression is the L value and which expression is the R value:
+1. If an expression exists of a variable name then it is an L value (only name).
+2. Literal expressions are PR value.
+3. If an expression consists of an arithmetic operator, then it is a PR value.
+4. Some expressions that are created with the some operators are L value. The front ++ operator is one of them. For example, "++x" is a L value. But "x++" is a PR value. It is the same with "--" operator.
+5. Expression that is created with a comma if the right expression of the coma is L value that the expression is an L value
 6. Expression created with assignment operator is an L value
-7. If an function return type is not a reference that a call to that function is an PR value
-8. If an function return type is a L value reference that a call to that function is an L value
-9. If an function return type is a R value reference that a call to that function is an X value
+7. If a function return type is not a reference a call to that function is a PR value
+8. If a function return type is an L value reference a call to that function is an L value
+9. If a function return type is an R value reference a call to that function is an X value
 ```cpp
 int x{}; // x is a L value
 
@@ -523,22 +522,23 @@ int main
 	pvcat(x); // L value because it is a name
 	pvcat((x)); // L value
 	pvcat(10); // PR value because it is a literal
-	pvcat(x + 4); // PR value because it consist of an arithmetic operator
+	pvcat(x + 4); // PR value because it consists of an arithmetic operator
 	pvcat(a); // L value because it is a name
 	pvcat(a[3]); // L value
-	pvcat(++x); // L value because of pre increment operator
-	pvcat(x++); // PR value because of post incemetn operator 
+	pvcat(++x); // L value because of pre-increment operator
+	pvcat(x++); // PR value because of post increment operator 
 	pvcat(--x); // L value because of pre decrement operator
 	pvcat(X--); // PR value because of pre decremetn operator
-	pvcat((x, y)); // L value because right handside of coma is a L value
+	pvcat((x, y)); // L value because the right side of the coma is an L value
 	pvcat(x = 5); // L value because of assignment operator
 	pvcat (x += 5); // L value because of assignment operator
-	pvcat(foo()); // PR value because function doesn't return a reference
-	pvcat(func()); // L value because function returns an L value referenca
-	pvcat(bar()); // X value because function returns an R value reference
+	pvcat(foo()); // PR value because the function doesn't return a reference
+	pvcat(func()); // L value because the function returns an L value reference
+	pvcat(bar()); // X value because the function returns an R-value reference
 	pvcat(r); // L value because r is a name
 	pvcat(foo); // L value because foo is a function name
 	pvcat(nullptr); // PR value because nullptr is a literal
+	pcvat( x > 10 ? a : b); // L value expression
 }
 ```
 
@@ -552,7 +552,7 @@ int main()
 	int &r2 = x++; // syntax ERROR. x++ is not a L value (PR value)
 	int &&r2 = --x; // syntax ERROR. --x is not a R value (L value)
 
-	const int &r2 = x++; // OK. we can assing a PR value to const L value reference
+	const int &r2 = x++; // OK. we can assign a PR value to const L value reference
 }
 ```
 
@@ -561,8 +561,7 @@ int main()
 2. x, y (comma operator) is R value expression in C
 3. x > 10 ? a : b is R value expression in C. (L value expression in C++)
 
-> [!note] Note:
-> Pointer or reference function parameters can be take default value.
+> [!note] Note: Pointer or reference function parameters can take a default value.
 
 ```cpp
 int g = 10;
@@ -598,7 +597,7 @@ struct ValCat <T&&> {
 #define pvcat(expr) std::cout << "Value category of expr '" #expr "' is : " << ValCat<decltype((expr))>::p << '\n'
 ```
 # Auto Type Deduction
-Type deduction is a compile time tool. Now we look only auto type deduction. With auto keyword we must initialize the variable. We can use following initialize methods:
+Type deduction is a compile-time tool. Now we look only to auto type deduction. With the auto keyword, we must initialize the variable. We can use the following initialize methods: #Cpp_keyword_auto
 ```cpp
 int main()
 {
@@ -607,25 +606,24 @@ int main()
 	auto z(12);
 ｝
 ```
+There are differences between these initialization methods, but we will mention them later.
 
-There are differences between these initialization methods, but we will mention it later.
+There are some rules to deducting a type. These rules are complicated. We have three separate rule sets and we must learn them separately.
 
-There are some rules to deducting a type. This rules are complicated. We have three separated rule set and we must learn them separately.
-
-Following syntaxes have different type deduction rules:
+The following syntaxes have different type deduction rules:
 ```cpp
 auto x = expr;
 auto &x = expr;
-auto &&x = expr; // This is not a R value referance. This is forwarding reference (universal reference)
+auto &&x = expr; // This is not a R value referance. This is a forwarding reference (universal reference)
 ```
 
-If auto keyword is used with && like <mark style="background: #D2B3FFA6;">auto &&x = expr;</mark> this means <mark style="background: #BBFABBA6;">forwarding reference</mark>, not the R value reference. Or it named <mark style="background: #BBFABBA6;">universal reference</mark>. We will learn it later.
-For now, we will be focusing first two one.
+If the auto keyword is used with "&&" like "auto &&x = expr;" this means **forwarding reference**, not the R-value reference. Or it is named **universal reference**. We will learn it later. #Cpp_ForwardingReference #Cpp_UniversalReference
+For now, we will be focusing first two.
 ## auto x = expression; 
-auto works an placeholder. That means the compiler puts a type in place of auto.
+The auto works as a placeholder. That means the compiler puts a type in place of auto.
 
-<mark style="background: #FFF3A3A6;">What rules are implemented to determine which type is replaced the auto keyword?</mark>
-Here some examples:
+What rules are implemented to determine which type has replaced the auto keyword?
+Here are some examples:
 ```cpp
  int main()
 {
@@ -675,10 +673,11 @@ int main()
 int main()
 {
 	const int x = 10;
-	auto a = x; // type of a is int, cosnt is ignored
+	auto a = x; // type of a is int, const is ignored
 }
 ```
 const and reference are ignored when auto type deduction.
+
 ```cpp
 int main()
 {
@@ -703,12 +702,12 @@ int main()
 	int a[10]{};
 	const int b[10]{};
 
-	&a[0]; // Type of a is "int*" (array decay is same)
-	&b[0]; // Type of b is "const int*" (array decay is same)
+	&a[0]; // Type of a is "int*" (array decay is the same)
+	&b[0]; // Type of b is "const int*" (array decay is the same)
 }
 ```
 
-Look to the below code. What is the deducted type with second auto?  
+Look at the below code. What is the deducted type with a second auto?  
 ```cpp
 int main()
 {
@@ -722,7 +721,7 @@ int main()
 }
 ```
 
-We expect the deducted type "int \*" because "const" is ignored. But the deducted type with second auto is "const int \*". "Const" makes difference between variable types and address types. Address type of the <mark style="background: #ADCCFFA6;">const int a[];</mark> is <mark style="background: #ADCCFFA6;">const int *</mark>.
+We expect the deducted type "int \*" because "const" is ignored. But the deducted type with the second auto is "const int \*". "Const" makes the difference between variable types and address types. The address type of the "const int a[];" is "const int \*".
 
 ```cpp
  int main()  
@@ -731,6 +730,8 @@ We expect the deducted type "int \*" because "const" is ignored. But the deducte
 }
 ```
 
+#### This Const Type Difference is also related to the Function Overloading
+#Cpp_FunctionOverloading 
 Q: Is the following a function redeclaration?
 A: Yes, this is a function re-declaration. If the parameter is not a pointer, there is no difference if the argument is const or not.
 ```cpp
@@ -739,7 +740,7 @@ void func(const int a);
 ```
 
 Q: Is the following a function redeclaration?
-A: No, this is not a function redeclaration. These functions are separate functions.
+A: No, this is not a function redeclaration. These functions are separate.
 ```cpp
 void func(int* p);
 void func(const int* p);
@@ -753,17 +754,17 @@ void func(int* const p);
 ```
 
 > [!note] Note: Function signature difference with const arguments
-> constness of the parameter itself is not makes signature difference.
+> The constness of the parameter itself does not make a signature difference.
 
 > [!note] Note: Differences between address types and variable types
-<mark style="background: #FFB8EBA6;">Important Note: Additional info: </mark>There is no type difference between a variable type and const type of the same variable. That means <mark style="background: #D2B3FFA6;">int</mark> and <mark style="background: #D2B3FFA6;">const int</mark> is same type. But const makes difference in pointers; <mark style="background: #D2B3FFA6;">int \*</mark> and <mark style="background: #D2B3FFA6;">const int \*</mark> is not same type. But <mark style="background: #ADCCFFA6;">int \* p</mark> and <mark style="background: #ADCCFFA6;">int \*const p</mark> is same type. For example:
+> There is no type difference between a variable type and a const type of the same variable. That means "int" and "const int" are the same type. But, const makes a difference in pointers, "int \*" and "const int \*" are not the same type. But, "int \* p" and "int \*const p" are the same type. For example:
 
 ```cpp
-// Following is not a function redecleration. They are the decleration of different functions
+// The following is not a function redeclaration. They are the declaration of different functions
 void func(int* p);
 void func(const int* p);
 
-// Following code is a function redecleration. They are redecleration of same functions
+//The following code is a function redeclaration. They are redeclaration of the same functions
 void func(int* p);
 void func(int* const p);
 ```
@@ -791,7 +792,7 @@ int main()
 ## auto & = expression;
 
 ### Const difference
-Const is not ignored with "auto&", and this is different form "auto".
+Const is not ignored with "auto&", and this is different from "auto".
 Const difference between auto and auto&:
 ```cpp
 int main()
@@ -807,14 +808,14 @@ int main()
 //--------
 
 	const int ival{};
-	auto &x = ival; // Type of x is "const int&", and deducted type with auto is "const int". The expression is same as "const int &x = ival;"
+	auto &x = ival; // Type of x is "const int&", and deducted type with auto is "const int". The expression is the same as "const int &x = ival;"
 }
 ```
 
-In upper example,
-At first example, const was being ignored. Type of x is int.
-At second example, type of auto and type of x are differ. type of auto is int and type of x is int&.  
-At third example, type of auto is const int and type of x is const int&. 
+In the upper example,
+At first example, const was being ignored. The type of "x" is "int".
+In the second example, the type of auto and type of x differ. type of auto is "int" and type of "x" is "int&".  
+In the third example, the type of auto is "const int" and the type of "x" is "const int&". 
 So, with auto& const is not ignored.
 ### Array decay difference
 array decay difference between "auto" and "auto&":
@@ -826,12 +827,12 @@ int main()
 	// int (&x)[10] = a;
 ｝
 ```
-In upper example, the deducted type that corresponds to the auto is "int\[10\]".  x is reference to that type: "int (&)\[10\]"
+In the upper example, the deduced type that corresponds to the auto is "int\[10\]".  x is a reference to that type: "int (&)\[10\]"
 
 ```cpp
 int main()
 {
-	auto& r = "hello"; // const char[6] is corresponds the auto
+	auto& r = "hello"; // "const char[6]" is corresponding the auto, the type of r is "const char (&)[6]"
 	// cosnt char (&r)[6] = "hello";
 }
 ```
@@ -844,25 +845,26 @@ void foo(int);
 
 int main)
 {
-	//auto f1 = foo;
-	void (*f1)(int) = foo; // The deducted type for auto is:  "void (*)(int)"
+	auto f1 = foo; // The deducted type for auto is:  "void (*)(int)"
+	// void (*f1)(int) = foo;
 	
-	//auto &f2 = foo;
-	void (&f2)(int) = foo; // The decucted tyep for auto is: "void (int)", type of f2 is: "void (&)(int)"
+	auto &f2 = foo; // The deduced type for auto is: "void (int)", type of f2 is: "void (&)(int)"
+	// void (&f2)(int) = foo;
 }
 ```
 
-Additional Information: We can use auto keyword with other keywords. For example:
+## We can combine the auto keyword with the other keywords
+Additional Information: We can use auto keywords with other keywords. For example:
 ```cpp
 int main()
 {
 	int x = 120;
 	
-	const auto y =X;
+	const auto y = x; // Type of y is "const int"
 }
 ```
 
-In below example, type of p1 and p2 is same
+In the below example, the type of p1 and p2 is the same
 ```cpp
 int main()
 {
@@ -872,7 +874,7 @@ int main()
 }
 ```
 
-In below example, const qualifies the name (p2), and that means it is a top level const pointer.
+In the below example, const qualifies the name (p2), and that means it is a top-level const pointer.
 ```cpp
 int main()
 {
@@ -881,11 +883,11 @@ int main()
 }
 ```
 
-In below example, the error is not related to auto type deduction. It is related to reference semantics.
+In the below example, the error is not related to auto-type deduction. It is related to reference semantics.
 ```cpp
 int main()
 {
-	auto &x = 10; // syntax error, not related to deduction, related to R value: int &x = 10; (R value expression to L value reference syntax error)
+	auto &x = 10; // syntax error, not related to deduction, related to R-value, "int &x = 10;" (assigning an R-value expression to L value reference is a syntax error)
 }
 ```
 
@@ -896,8 +898,8 @@ int main()
 - Operator Overloading
 - Move Semantic
 - Perfect Forwarding
-- L value reference
-- R value reference
+- L-value reference
+- R-value reference
 - Value Category
 - Primary value category
 - Composite value category

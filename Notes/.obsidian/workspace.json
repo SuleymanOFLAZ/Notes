@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "cbcbe52b3194f572",
+        "id": "8b9b03ea249f4f22",
         "type": "tabs",
         "children": [
           {
-            "id": "b09cb40e71c852a9",
+            "id": "fe2d2dab47574a11",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -20,7 +20,7 @@
             }
           },
           {
-            "id": "473d38822268693a",
+            "id": "a2f1f6e1d5d6a26a",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -30,8 +30,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "46ccfaaf699b6254",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CPP/CPP_Course/03_CPP_Course.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -179,12 +192,13 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "b09cb40e71c852a9",
+  "active": "46ccfaaf699b6254",
   "lastOpenFiles": [
-    "CPP/CPP_Course/02_CPP_Course.md",
     "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
+    "CPP/CPP_Course/03_CPP_Course.md",
     "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
     "CPP/Home.md",
+    "CPP/CPP_Course/02_CPP_Course.md",
     "CPP/CPP_Course/01_CPP_Course.md",
     "CPP/CPP_Topics/Drawings/001_AnatomyOfVector.md",
     "CPP/CPP_Topics/Drawings/002_VectorCopy.md",
@@ -208,7 +222,6 @@
     "Excalidraw",
     "Untitled.md",
     "CPP_Course/08_CPP_Course.md",
-    "CPP_Topics/RAII (Resource Acquisition Is Initialization).md",
     "Images/CppValueCategories.png",
     "Images",
     "Untitled.canvas",
