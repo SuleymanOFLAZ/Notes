@@ -22,6 +22,8 @@
 - mandatory copy elision
 - Small Buffer Optimization - SBO : 10-02:45
 - The NRVO obstacles
+- std::bad_alloc
+- placement new operator
 # Topics that needed to be look
 - Most Vexing Parse
 - AAA: Almost Always Auto
