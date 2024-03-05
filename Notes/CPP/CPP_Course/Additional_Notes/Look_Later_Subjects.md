@@ -24,6 +24,7 @@
 - The NRVO obstacles
 - std::bad_alloc
 - placement new operator
+- inline variables - C++17
 # Topics that needed to be look
 - Most Vexing Parse
 - AAA: Almost Always Auto
@@ -40,3 +41,4 @@
 - Small Buffer Optimization - SBO
 - tool to use bool as 1 bit
 - Type categorization in C++ (For ex aggregate types)
+- zero-sized array extension

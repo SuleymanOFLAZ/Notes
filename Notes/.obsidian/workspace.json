@@ -4,52 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "8b9b03ea249f4f22",
+        "id": "2985d72a784fe60a",
         "type": "tabs",
         "children": [
           {
-            "id": "fe2d2dab47574a11",
+            "id": "67a9b1b7a3c7dd07",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CPP/CPP_Course/11_CPP_Course.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "a2f1f6e1d5d6a26a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "46ccfaaf699b6254",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CPP/CPP_Course/03_CPP_Course.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "b521222e2a39880f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CPP/CPP_Course/06_CPP_Course.md",
+                "file": "CPP/CPP_Course/12_CPP_Course.md",
                 "mode": "source",
                 "source": false
               }
@@ -121,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CPP/CPP_Course/11_CPP_Course.md",
+                "file": "CPP/CPP_Course/12_CPP_Course.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -138,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CPP/CPP_Course/11_CPP_Course.md",
+                "file": "CPP/CPP_Course/12_CPP_Course.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -161,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CPP/CPP_Course/11_CPP_Course.md"
+                "file": "CPP/CPP_Course/12_CPP_Course.md"
               }
             }
           },
@@ -203,18 +167,21 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "fe2d2dab47574a11",
+  "active": "67a9b1b7a3c7dd07",
   "lastOpenFiles": [
-    "CPP/CPP_Course/12_CPP_Course.md",
     "CPP/CPP_Course/11_CPP_Course.md",
+    "CPP/CPP_Course/12_CPP_Course.md",
+    "CPP/Home.md",
+    "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
+    "C",
+    "Python",
+    "D&A",
     "CPP/CPP_Course/06_CPP_Course.md",
     "CPP/CPP_Course/05_CPP_Course.md",
-    "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
     "CPP/CPP_Course/03_CPP_Course.md",
     "CPP/CPP_Course/04_CPP_Course.md",
     "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
     "Untitled.md",
-    "CPP/Home.md",
     "CPP/CPP_Course/02_CPP_Course.md",
     "CPP/CPP_Course/01_CPP_Course.md",
     "CPP/CPP_Topics/Drawings/001_AnatomyOfVector.md",
@@ -231,7 +198,6 @@
     "CPP_Course/10_CPP_Course.md",
     "Excalidraw/001_statesOfSMF.md",
     "Home.md",
-    "CPP_Course/Additional_Notes/Look_Later_Subjects.md",
     "Excalidraw",
     "Images/CppValueCategories.png",
     "Images",
@@ -239,9 +205,6 @@
     "CPP_Course/Additional_Notes",
     "CPP_Course/Course_Drawings",
     "C Notes",
-    "Interview Qustions",
-    "CPP_Topics",
-    "CPP_Course",
-    "templates"
+    "Interview Qustions"
   ]
 }

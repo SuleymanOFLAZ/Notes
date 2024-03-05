@@ -776,28 +776,6 @@ int main()
 }
 ```
 
-# Static Data Members of the Classes
-#Cpp_StaticDataMembers
-The data members of the classes are divided into two categories. These are non-static data members and **static data members**.
-
-The non-static data members of the class are in the class instance. That means there are independent non-static data members for each class object. Each non-static data member increases the size of the class.
-
-The static members of the class are not in the class instance. There is one member for the class for each static member. This means there are no independent static members for each class object. Static members exist, even if we don't declare an object. Static members are created before the main function and destroyed after the main function.
-
-Actually, a static data member is not different from a global variable, made compatible with other tools of the language. All of the objects of the class can use the static data members.
-
-The static members are declared with the **static keyword**. Note that, the meaning of the keyword is different from the other use cases of the keyword. #Cpp_keyword_static
-
-```cpp
-class Myclas {
-	static int x;
-};
-```
-
-Why do we use a static data member instead of a global variable?
-- Static data members are declared at the class scope. We have to qualify the static data member with the resolution, dot, or arrow operator to be able to use it. #Cpp_operator_resolution
-- The static data members are subjected to access control. It can be public, private, or protected.
-
 ---
 # Terms
 - Dynamic memory management
@@ -813,7 +791,6 @@ Why do we use a static data member instead of a global variable?
 - array new operator
 - array delete operator
 - placement new operator
-- static data member
 
 ---
 return: [[00_Course_Files]]
