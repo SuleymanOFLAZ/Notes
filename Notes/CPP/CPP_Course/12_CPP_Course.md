@@ -160,14 +160,15 @@ A tool called "**inline variables**" is added to the language with the C++17 sta
 **Can we initialize the static data member inside the class definition?**
 There are two ways to do that:
 1. We use the inline variable that has come with C++17.
-2. If the static member is a const and integer, we can initialize it inside the class definition. Both of the attributes have to be ensured to do that. This feature has been coming from the old C++.
+2. If the static member is a const and integer, we can initialize it with a constant expression inside the class definition. Both of the attributes have to be ensured to do that. This feature has been coming from the old C++.
 
-```cpp title:"initializing a const and integer type static data member inside the class definition."
+```cpp title:"initializing a const and integer type static data member inside the class definition." valid:3 error:4,5,6
 class Myclass{
 public:
 	const static int x = 5; // We can initialize it inside the class definition because it is a const and an integer.
 	static int y = 5; // Syntax ERROR. We CANNOT initialize it inside the class definition because it is not a const. The error message: a member with an in-class initializer must be const.
 	const static double d = 5; // Syntax ERROR. We CANNOT initialize it inside the class definition because it is not an integer. The error message: a member of "const double" cannot have an in-class initializer.
+	const static int z = foo(); // Syntax ERROR. We have to initialize with a constant expression
 };
 ```
 
@@ -241,6 +242,43 @@ int main()
 	decltype(Myclass::x) // OK. Because it is an unevaluated context.
 }
 ```
+
+## We can't initialize a static data member with a constructor
+A constructor doesn't initialize a static data member. The member initializer-list an initializer syntax and a static data member isn't initialized with it. A static data member is created before calling the constructor.
+```cpp error:x{10}
+class Myclass{
+public:
+	Myclass() : x{10} {} // Syntax ERROR. A constructor doesn't initialize a static data member.
+private:
+	inline static int x;
+};
+```
+
+Global variables and static data members of the classes are initialized before the main call.
+```cpp
+int foo()
+{
+	std::cout << "foo\n";
+	return 5;
+}
+
+class Myclass {
+	inline static int x = foo();
+};
+
+int main()
+{
+	std::cout << "main\n";
+}
+```
+``` title:output
+foo
+main
+```
+
+**How Many Objects Are Alive**
+We can increase a static data member inside the constructor to count how many objects are alive.
+
 # Static Member Functions of the Classes
 #Cpp_StaticMemberFunctions
 Non-static data members are called for the class instances. They take the class instance address as a hidden parameter. However, the static member functions of the classes don't have the this pointer. They aren't called for a class instance. However, they are inside the class scope. They can access the private area of the class. They do operations for the class, not for a class instance. They have the access control. Mostly, they are good alternatives to global functions. #Cpp_thisPointer 
@@ -296,7 +334,7 @@ class Myclass{
 	static int foo(); // Static member function.
 };
 
-inline int Myclass::foo() // We have to use the inline keyword here.
+inline int Myclass::foo() // We have to use the inline keyword here. (The ODR)
 {
 	// ...
 
@@ -306,7 +344,281 @@ inline int Myclass::foo() // We have to use the inline keyword here.
 
 > [!warning]  Warning: We have to use the inline keyword if we define a static member function inside the header file and outside the class definition because it breaks the ODR if we don't use the inline keyword.
 
-AT 01:33
+Static member functions of the classes can be accessed by the dot and the arrow operators. However, this is not a convenient approach. It can mislead the reader or is open to make mistakes. The resolution operator is a more convenient approach. #Cpp_operator_resolution 
+
+> [!warning]  Warning: Due to a static member function being called by using the dot or arrow operator, we should be careful to not make a call to a static member function instead of a non-static member function by mistake.
+## How can a static member function use the non-static members?
+We can't use the non-static data members inside the static member function because to use a non-static data member we need an object instance.
+```cpp error:"mx = 10"
+class Myclass{
+public:
+	static int foo() // Static member function.
+	{
+		mx = 10; // Syntax Error. We need an object instance to use the non-static data member. The compiler error: illegal reference to non-static member 'Myclass'
+	}
+private:
+	int mx, my;
+};
+```
+
+We can write like the following. A static member function can access the private area of the class.
+```cpp valid:"mx = 10"
+class Myclass{
+public:
+	static int foo() // Static member function.
+	{
+		Myclass m;
+		m.mx = 10; // OK.
+	}
+	static int func(Myclass m)
+	{
+		m.mx = 10; // OK.
+	}
+private:
+	int mx, my;
+};
+```
+
+We can write like the following:
+```cpp valid:"mx = 10"
+class Myclass{
+public:
+	static int foo();
+private:
+	int mx, my;
+};
+
+Myclass g;
+
+inline int Myclass::foo()
+{
+	g.mx = 10; // OK.
+	return 1;
+}
+```
+
+These constraints about non-static data members are valid also on non-static member functions. There is a need for a class instance to call a non-static member function.
+
+```cpp error:9
+class Myclass {
+public:
+	void foo()
+	{
+	
+	}
+	static void func()
+	{
+		foo(); // Syntax ERROR. There is a need for a class instance to call a non-static member function.
+	}
+};
+```
+
+## Function Overload between static and non-static member functions
+A static and a non-static member functions can be overloaded. #Cpp_FunctionOverloading 
+```cpp
+class Myclass {
+public:
+	void func(int)
+	{
+		std::cout << "func(int)\n";
+	}
+
+	static void func(double)
+	{
+		std::cout << "static func(double)\n";
+	}
+
+	void f()
+	{
+		func(3.4);
+		func(5);
+	}
+};
+
+int main()
+{
+	Myclass m;
+
+	m.f();
+}
+```
+``` title:"Output"
+static func(double)
+func(int)
+```
+
+## How can a static member function use the static data members?
+The static member functions can use the static data members of the class.
+```cpp valid:"x = 10"
+class Myclass{
+public:
+	static int foo()
+	{
+		x = 10; // OK
+	}
+private:
+	inline static int x;
+};
+```
+
+In general, we don't make the non-const static data members public. But it is widespread the making const static data members public. We can give get facility to non-const static data members. The client codes can reach the non-const static data members via the get facility. The class can change the non-const static data member and give access facility to client codes.
+```cpp
+#include <iosteam>
+
+class Myclass{
+public:
+	static int getx()
+	{
+		return x;
+	}
+	static void foo()
+	{
+		x = 10;
+	}
+private:
+	inline static int x{};
+};
+
+int main()
+{
+	Myclass::foo();
+
+	std::cout << Myclass::getx() << "\n";
+}
+```
+## Private Constructor Example
+The client codes can't access the constructor of the class and create an object if the constructor is private. However, a static member function can still access.
+```cpp title:"Private Constructor Example" hl:Myclass() error:15 valid:10
+class Myclass{
+public:
+	static void foo();
+private:
+	Myclass(); // Private default constructor.
+};
+
+inline int Myclass::foo()
+{
+	Myclass m; // OK. A static member function can access a private constructor.
+}
+
+int main()
+{
+	Myclass m; // Syntax ERROR. Because the constructor is private.
+}
+```
+
+#  Name lookup rules for the names that initialize the static data members
+The names in the expression that initializes the static data members of the classes are looked at in the class scope first, then they are looked at in the namespace scope.
+
+> [!question] Question: What will be the output? #Cpp_Interview_Question 
+> A: The output is "2". Because the names in the expression that initializes the static data members of the classes are looked at in the class scope first, then they are looked at in the namespace scope. The answer is related to the name lookup. #Cpp_name_lookup 
+
+```cpp title:"Q: What will be the output? "
+int foo()
+{
+	return 1;
+}
+
+class Myclass {
+public:
+	static int x;
+private:
+	static int foo()
+	{
+		return 2;	
+	}
+};
+
+int Myclass::x = foo();
+
+int main()
+{
+	std::cout << Myclass::x << '\n';
+}
+```
+``` title:"Output"
+2
+```
+
+> [!question] Question: What will be the output? #Cpp_Interview_Question 
+> A: The output is "10". Because the names in the expression that initializes the static data members of the classes are looked at in the class scope first, then they are looked at in the namespace scope.
+
+```cpp title:"Q: What will be the output? "
+
+int g = 35;
+int foo()
+{
+	return 1;
+}
+
+class Myclass {
+public:
+	inline static int g = 10;
+	static int x;
+private:
+	static int foo()
+	{
+		return 2;	
+	}
+};
+
+int Myclass::x = g;
+
+int main()
+{
+	std::cout << Myclass::x << '\n';
+}
+```
+``` title:"Output"
+10
+```
+
+# Questions About The Static Members
+> [!question] Question: What is the situation? #Cpp_Interview_Question 
+> a. Syntax Error
+> b. Undefined Behavior
+> c. No problem
+> A: No problem. the const keyword qualifies the this pointer.
+
+```cpp valid:5
+class Myclass {
+public:
+	void func() const
+	{
+		x = 43; // OK
+	}
+	inline static int x = 10;
+};
+```
+
+> [!question] Question: Is there a syntax error?
+> A: No. 
+
+```cpp valid:m.foo,m.func
+class Myclass {
+public:
+	void foo();
+	static void func();
+};
+
+int main()
+{
+	Myclass m;
+
+	m.foo(); // OK
+	m.func(); // OK
+}
+```
+
+# Some Typical Patterns That Use the Static Member Functions
+## Named Constructor
+#Cpp_NamedConstructor
+We sometimes prefer using a named function as a constructor instead of giving directly a constructor.
+
+Why do we need this? Let's look at it with an example.
+
+AT: 02:20
+
 # Friend Declaration
 
 # Operator Overloading
@@ -317,6 +629,7 @@ AT 01:33
 - inline variables
 - zero-sized array extension
 - header-only library
+- Named Constructor
 
 ---
 Return: [[00_Course_Files]]
