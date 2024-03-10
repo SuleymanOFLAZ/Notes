@@ -487,7 +487,7 @@ int main()
 }
 ```
 ## Private Constructor Example
-The client codes can't access the constructor of the class and create an object if the constructor is private. However, a static member function can still access.
+The client codes can't access the constructor of the class and create an object if the constructor is private. However, a static member function can still access. #Cpp_PrivateConstructor
 ```cpp title:"Private Constructor Example" hl:Myclass() error:15 valid:10
 class Myclass{
 public:
@@ -611,17 +611,324 @@ int main()
 ```
 
 # Some Typical Patterns That Use the Static Member Functions
+
 ## Named Constructor
-#Cpp_NamedConstructor
-We sometimes prefer using a named function as a constructor instead of giving directly a constructor.
+#Cpp_NamedConstructor #Cpp_idiom
+We sometimes prefer using a named function (that is a static member function) as a constructor instead of giving directly a constructor.
 
-Why do we need this? Let's look at it with an example.
+Why do we need this? Let's look at it with examples. 
+###  A Class that represents two different representations of an object
+Complex numbers can shown in two different notations, polar notation and cartesian notation. A typic "Complex class" allows both notation formats. There are two constructors. Consider we write it like the following. The constructor's signatures are the same. This is a syntax error.
 
-AT: 02:20
+```cpp error:double
+class Complex{
+public:
+	Complex(double r, double i);
+	Complex(double angle, double distance); // Syntax ERROR. The signatures of the constructors are the same.
+};
+```
 
-# Friend Declaration
+What we can do? We can give the class static member functions to create objects instead of the constructors.
 
-# Operator Overloading
+```cpp hl:3,4
+class Complex{
+public:
+	static Complex create_cartasian(double r, double i); // Factory Function
+	static Complex create_polar(double a, double d); // Factory Function
+};
+
+int main()
+{
+	auto c1 = Complex::create_polar(1.2, 4.5);
+	auto c2 = Complex::create_cartasian(3., 3.4);
+}
+```
+
+These kinds of functions (which create an object) are called "**factory functions**". We still need a constructor. We write the constructor as private. The constructor is closed to the client codes. Only the member functions can access the constructors. #Cpp_PrivateConstructor
+
+The signatures of the constructors are still an issue. To make the signatures different we give a dummy parameter to one of the constructors. Even we don't need to give a name to that dummy parameter. This signature difference doesn't concern the client codes.
+
+```cpp hl:3,4
+class Complex{
+private:
+	Complex(double r, double i, int dummy);  // Private constructor (with a dummy parameter, to make its signature different)
+	Complex(double a, double d); // Private constructor
+public:
+	static Complex create_cartasian(double r, double i); // Factory Function
+	static Complex create_polar(double a, double d); // Factory Function
+};
+
+int main()
+{
+	auto c1 = Complex::create_polar(1.2, 4.5);
+	auto c2 = Complex::create_cartasian(3., 3.4);
+}
+```
+
+The static member functions are called the convenient constructor.
+```cpp hl:return
+class Complex{
+private:
+	Complex(double r, double i, int dummy);  // Private constructor (with a dummy parameter, to make its signature different)
+	Complex(double a, double d); // Private constructor
+public:
+	static Complex create_cartasian(double r, double i);
+	{
+		return Complex{r, i, 0};
+	}
+	static Complex create_polar(double a, double d);
+	{
+		return Complex{a, d};
+	}
+};
+
+int main()
+{
+	auto c1 = Complex::create_polar(1.2, 4.5);
+	auto c2 = Complex::create_cartasian(3., 3.4);
+}
+```
+
+### A Class that can only be dynamically created
+#Cpp_idiom
+Another use case of the names constructor is to create a class type that is only possible to create objects dynamically. We make the constructor private so the client codes can't create objects. We give a factory function (which is a static member function that creates objects) that creates objects dynamically (using the new operator).
+
+```cpp
+class DynamicOnly{
+	DynamicOnly();
+public:
+	static DynamicOnly& create_object()
+	{
+		return *new DynamicOnly;
+	}
+};
+
+int main()
+{
+	auto &x = DynamicOnly::create_object();
+}
+```
+
+> [!note] Note: We would use the unique_ptr instead of reference or pointer if we want to use this technique. #Cpp_unique_ptr
+
+## Object Count
+#Cpp_Idiom
+Sometimes we need to count the object instances that are alive at the point or have been created until now.
+
+```cpp
+class Myclass {
+public:
+	Myclass()
+	{
+		++num_of_alive;
+		++num_of_lived;
+	}
+	~Myclass()
+	{
+		--num_of_alive;
+	}
+	static int get_lived_count()
+	{
+		return num_of_lived;
+	}
+	static int get_alive_count()
+	{
+		return num_of_alive;
+	}
+
+private:
+	inline static int num_of_alive = 0;
+	inline static int num_of_lived = 0;
+};
+
+int main()
+{
+	Myclass m1, m2, m3;
+	Myclass* p1 = new Myclass;
+	Myclass* p2 = new Myclass;
+
+	if(1)
+	{
+		Myclass m4, m5;
+	}
+
+	delete p1;
+
+	std::cout << "Lived: " << Myclass::get_lived_count() << '\n';
+	std::cout << "Alive: " << Myclass::get_alive_count() << '\n';
+
+	delete p2;
+}
+```
+
+> [!note] Note: We need to define the copy constructor and increment the count inside it too to count the copied objects.
+# Delegating Constructor
+#Cpp_constructor #Cpp_DelegatingConstructor
+
+The **delegating constructor** is added with C++11. #Cpp11
+
+First, let's look why the delegating constructor is added. Most of the time, there are a common code that initializes the members of the class.
+```cpp
+class Myclass {
+public:
+	Myclass();
+	Myclass(int);
+	Myclass(int, int);
+	Myclass(const char* p);
+private:
+	int m1, m2, m3;
+};
+```
+Let's assume there is a common code of all these constructors and we want to collect that code in one place as a general programming principle. 
+
+To achieve this we were declaring a private function and the constructors were calling it. (Before C++11)
+```cpp
+#include <cstdlib>
+class Myclass {
+public:
+	Myclass()
+	{
+		init(0, 0, 0);
+	}
+	Myclass(int x)
+	{
+		init(x, 0, 0);
+	}
+	Myclass(int a, int b)
+	{
+		init(a, b, 0);
+	}
+	Myclass(const char* p)
+	{
+		auto i = std::atoi(p);
+		init(i, i, i);
+	}
+private:
+	void init(int, int, int);
+	int m1, m2, m3;
+};
+```
+
+What is the missing point of this approach?
+- The common function doesn't do the initializing job in actuality. The object was already initialized when the control flow entered the common function. Why this is important? If the data members are other class types, this is very important because we could write such a code that first default initializes the class type data members and then assigns a value to them.
+- Also, the matter of not actually initializing the data members with that syntax can be an issue with cost or **exception handling**. #Cpp_ExceptionHandling
+- The common function is created to be called only by the constructors. We close it to the client codes by making it private. But there is no obstacle to calling the common code by the member functions.
+
+Most of the time the common code of the constructors is the one of the constructor itself. So the other constructor can use the one of the constructor's code. However, the language rules weren't allowing this. The delegating constructor makes it possible.
+
+We use the delegating constructor syntax, that is making a call to another constructor inside a constructor, by writing the constructor call inside the constructor initializer list as follows:
+```cpp hl:3
+class Myclass {
+public:
+	Myclass(): Myclass(0, 0) // Delegating constructor
+	{
+	
+	}
+	Myclass(int a, int b)
+	{
+	
+	}
+private:
+	int m1, m2, m3;
+};
+```
+
+This delegation can be more than one. A constructor that is called by another constructor can call another constructor.
+
+> [!warning]  Warning: We can't initialize the data members anymore at the constructor initializer list of the constructor that delegates if it delegates to another constructor.
+
+```cpp error:ma{10}
+class Myclass {
+public:
+	Myclass(): Myclass(0, 0), ma{10} // Syntax ERROR. The constructor can't initialize the data member because it delegates to another constructor.
+	{
+	
+	}
+	Myclass(int a, int b)
+	{
+	
+	}
+private:
+	int ma;
+};
+```
+
+> [!warning]  Warning: Not that, a constructor can't be called by its name except the delegating constructor syntax.
+
+# Parentheses and Brace Difference
+#Cpp_UniformInitialization 
+There are some differences between parentheses and braces after modern C++.
+- We can initialize with braces at places where we can initialize with parentheses. This is called brace initialization or uniform initialization.
+- There are some places that have differences between initializing with braces and parentheses. For example the vector class.
+
+```cpp
+#include <vector>
+
+int main()
+{
+	std::vector<int> ivec1(10, 5); // Calls the fill constructor
+	std::vector<int> ivec2{20, 6}; // Calls the constructor that takes std::initializer_list type as a parameter.
+}
+```
+
+The constructors that are called in the upper example are different. 
+The first constructor that is called with parentheses takes parameter types size_t and int creates the vector with 20 items and fills that with 5. The constructor is called a "**fill constructor**".
+The second constructor that is called with braces creates 2 objects that have values of 20 and 5. This constructor takes **std::initializer_list** type which is a class type in the standard library as a parameter.
+
+# Accessing All Other Objects inside An Object
+#Cpp_idiom 
+A class that all of its objects can communicate with each other. We add a static vector to the class that holds the this pointers of the objects.
+```cpp
+#include <string>
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+class Fighter {
+public:
+	Fighter(std::string name) : m_name(std::move(name))
+	{
+		svec.push_back(this);
+	}
+	~Figher()
+	{
+		if (auto iter = std::find(svec.begin(), svec.end(), this); iter != svec.end())
+		{
+			svec.erase(iter);
+		}
+	}
+	void print()const;
+	std::string get_name()const;
+
+	void ask_for_help()
+	{
+		std::cout << "Asking for help\n";
+		for (auto p :svec )
+		{
+			if( this != p)
+			{
+				std::cout << p->m_name << " ";
+			}
+		}
+		std::cout << "\n";
+	}
+private:
+	std::string m_name;
+	static inline std::vector<Fighter*> svec;
+};
+
+int main()
+{
+	Fighter f1{"Ftr1"}, f2{"Ftr2"}, f3{"Ftr3"}, f4{"Ftr4"};
+	auto f5 = new Fighter{"Ftr5"};
+
+	// ...
+
+	f4.ask_for_help();
+
+	delete f5;
+}
+```
 
 ---
 # Terms
@@ -630,6 +937,11 @@ AT: 02:20
 - zero-sized array extension
 - header-only library
 - Named Constructor
+- factory functions
+- delegating constructor
+- exception handling
+- fill constructor
+- std::initializer_list
 
 ---
 Return: [[00_Course_Files]]

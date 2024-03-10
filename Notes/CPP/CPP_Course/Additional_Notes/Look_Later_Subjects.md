@@ -25,6 +25,10 @@
 - std::bad_alloc
 - placement new operator
 - inline variables - C++17
+- Why initializing with std::move is more advantageous than using a const reference while initializing in the constructor initializer list.
+- bitset library
+- .\* operator
+- 
 # Topics that needed to be look
 - Most Vexing Parse
 - AAA: Almost Always Auto
@@ -42,3 +46,4 @@
 - tool to use bool as 1 bit
 - Type categorization in C++ (For ex aggregate types)
 - zero-sized array extension
+- typeid operator
