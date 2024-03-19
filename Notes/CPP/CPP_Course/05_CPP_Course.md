@@ -430,9 +430,9 @@ decltype((x)); // "(x)" is NOT a name expression.
 ```
 
 Now, let's look at the set of rules:
-The type that deducted with decltype is depends on the decltype's operand's value category. Remember, an expression's value category can be in the PR value category, the L value category or the X value category.
+The type that deducted with decltype is depends on the decltype's operand's value category. Remember, an expression's value category can be in the PR value category, the L value category, or the X value category.
 
-The deduced type can be like the following depending on the value category of the expression of the operand of the decltype, in assumption the type of the expression is T type.
+The deduced type can be like the following depending on the value category of the expression of the operand of the decltype, in assumption the type of the expression is T type. #Cpp_ValueCategory 
 1. The type is deducted as "T" in the situation where the expression value category is a PR value.
 2. The type is deducted as "T&" (L value reference) in the situation where the expression value category is an L value.
 3. The type is deducted as "T&&" in the situation where the expression value category is an X value.

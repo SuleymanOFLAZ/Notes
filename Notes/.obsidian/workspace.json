@@ -37,14 +37,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
+                "file": "CPP/CPP_Course/15_CPP_Course.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -110,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
+                "file": "CPP/CPP_Course/05_CPP_Course.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +126,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
+                "file": "CPP/CPP_Course/05_CPP_Course.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +149,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "CPP/CPP_Course/Additional_Notes/Repeat_Count.md"
+                "file": "CPP/CPP_Course/05_CPP_Course.md"
               }
             }
           },
@@ -171,7 +170,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -192,20 +191,20 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "62e3226c2f2d80fa",
+  "active": "a863237364b3d32c",
   "lastOpenFiles": [
+    "CPP/CPP_Course/15_CPP_Course.md",
     "CPP/CPP_Course/05_CPP_Course.md",
+    "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
     "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
     "CPP/CPP_Course/04_CPP_Course.md",
     "CPP/Home.md",
-    "CPP/CPP_Course/15_CPP_Course.md",
     "Python/Python_Course/01_Python_Course.md",
     "Python/Additional_Notes/Look_Later_Subjects.md",
     "Python/Additional_Notes",
     "Python/Python_Course",
     "CPP/CPP_Course/10_CPP_Course.md",
     "CPP/CPP_Course/14_CPP_Course.md",
-    "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
     "CPP/CPP_Course/13_CPP_Course.md",
     "CPP/Images/Pasted image 20240312212456.png",
     "CPP/CPP_Course/03_CPP_Course.md",
