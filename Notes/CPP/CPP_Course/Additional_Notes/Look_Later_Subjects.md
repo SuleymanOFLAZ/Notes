@@ -28,7 +28,9 @@
 - Why initializing with std::move is more advantageous than using a const reference while initializing in the constructor initializer list.
 - bitset library
 - .\* operator
-- 
+- reference qualifires
+- extractor functions and iostream library
+- unique_ptr, unique ownership
 # Topics that needed to be look
 - Most Vexing Parse
 - AAA: Almost Always Auto
@@ -47,3 +49,6 @@
 - Type categorization in C++ (For ex aggregate types)
 - zero-sized array extension
 - typeid operator
+- SOLID Principle
+- std::deque class
+- std::map class

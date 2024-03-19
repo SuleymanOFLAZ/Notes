@@ -27,12 +27,13 @@ The classes or global functions that we mentioned can't access the private secti
 
 This can create a bad perception at first glance because it breaks the principle of object-oriented programming. However, it actually does not break because we give these privileges to only the implementation codes, not the client codes.
 
+> [!important] Important: We can make a function's definition in our class definition if we declare the function as a friend. This is an exception case since we can define it inside the class definition even if the function is a global function.
+
 ## How do we make a friend declaration?
 There are three types of friend declarations. These are:
 - to giving friend privilege to a global function (a function that is declared inside the namespace). #Cpp_NameSpace 
 - to giving friend privilege to a member function of a class. #Cpp_memberFunctions 
 - to giving friend privilege to a class.
-
 ## 1. Declaring a global function as friend
 ```cpp error:18,19 valid:11,12
 class Myclass {
@@ -560,6 +561,8 @@ int main()
 	// We make a call like: operator<<(cout, str). The global operator function is provided by the string library:  std::ostream& operator<<(std::ostream&, const std::string&)
 }
 ```
+
+The functions that give the object to the output stream are called **inserter functions**.
 
 ## The operator overloading requires the reference semantic
 Consider to write "&m1 + &m2". Is it convenient? Or consider to write "\*a\[5\]". Therefore, the reference semantic was needed to make the operator overloading meaningful. #Cpp_ReferenceSemantic 

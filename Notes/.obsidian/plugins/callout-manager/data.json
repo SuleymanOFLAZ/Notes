@@ -1,0 +1,21 @@
+{
+  "callouts": {
+    "custom": [],
+    "settings": {
+      "important": [
+        {
+          "changes": {
+            "icon": "lucide-badge-info",
+            "color": "0, 140, 179"
+          }
+        }
+      ]
+    }
+  },
+  "calloutDetection": {
+    "obsidianFallbackForced": false,
+    "obsidian": true,
+    "theme": true,
+    "snippet": true
+  }
+}
