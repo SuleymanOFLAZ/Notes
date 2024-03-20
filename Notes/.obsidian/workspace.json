@@ -4,40 +4,28 @@
     "type": "split",
     "children": [
       {
-        "id": "26d160f6a80c1203",
+        "id": "08427a687dcaa876",
         "type": "tabs",
         "children": [
           {
-            "id": "a863237364b3d32c",
+            "id": "218e304dc05115d4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
                 "file": "CPP/CPP_Course/05_CPP_Course.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               }
             }
           },
           {
-            "id": "6de3f71a11f60509",
+            "id": "4022172df875cf97",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "62e3226c2f2d80fa",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "CPP/CPP_Course/15_CPP_Course.md",
+                "file": "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
                 "mode": "source",
                 "source": false
               }
@@ -191,14 +179,14 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "a863237364b3d32c",
+  "active": "218e304dc05115d4",
   "lastOpenFiles": [
-    "CPP/CPP_Course/15_CPP_Course.md",
-    "CPP/CPP_Course/05_CPP_Course.md",
     "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
+    "CPP/CPP_Course/05_CPP_Course.md",
+    "CPP/Home.md",
+    "CPP/CPP_Course/15_CPP_Course.md",
     "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
     "CPP/CPP_Course/04_CPP_Course.md",
-    "CPP/Home.md",
     "Python/Python_Course/01_Python_Course.md",
     "Python/Additional_Notes/Look_Later_Subjects.md",
     "Python/Additional_Notes",

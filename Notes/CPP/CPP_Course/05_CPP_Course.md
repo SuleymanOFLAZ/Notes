@@ -54,7 +54,7 @@ int main()
 }
 ```
 
-Upper code is a syntax error in C++. There is no type conversion from "const int*" to "int*". But the compiler warns us in C, not a syntax error. 
+Upper code is a syntax error in C++. There is no type conversion from "const int\*" to "int\*". But the compiler warns us in C, not a syntax error. 
 We can prevent the error with typecast. But that doesn't mean this is true. This is very dangerous because it can lead to undefined behavior in case we try to change the object.
 
 ```cpp
@@ -159,8 +159,8 @@ int main()
 {
 	std::size_t n = 100;
 
-	int* p = static_cast<int*>(std::malloc(n*sizeof(int))); // OK.
-	int* p = reinterpret_cast<int*>(std::malloc(n*sizeof(int))); // OK. The exception case 
+	int* p = static_cast<int*>(std::malloc(n*sizeof(int))); // OK. The exception case 
+	int* p = reinterpret_cast<int*>(std::malloc(n*sizeof(int))); // OK.
 
 }
 ```
@@ -197,8 +197,8 @@ int main()
 4. There is NO implicit type conversion between different address types.
 5. There is NO implicit type conversion from the const object address to the non-const object address. (const T\* -> T\*).
 6. There is implicit type conversion from a const object address to a non-const object address. (T\* -> const T\*).
-7. There is implicit type conversion from "T*" -> "void*"
-8. There is NO implicit type conversion from "void*" to "T*"
+7. There is an implicit type conversion from "T\*" -> "void\*"
+8. There is NO implicit type conversion from "void\*" to "T\*"
 9. There is implicit type conversion from enum types to arithmetic types.
 10. There is NO implicit type conversion from arithmetic types to enum types.
 11. There is NO implicit type conversion between enum types.
@@ -226,7 +226,7 @@ int main()
 }
 ```
 
-The upper code is a syntax error in C++ because the compiler doesn't know the size of the enum. This is "**incomplete type**" in C++. But, the syntax is not an error in C because, the compiler knows the size, it must be int. So, this is a "**complete type**" in C. #Cpp_C_difference 
+The upper code is a syntax error in C++ (before modern C++) because the compiler doesn't know the size of the enum. This is "**incomplete type**" in C++. But, the syntax is not an error in C because, the compiler knows the size, it must be int. So, this is a "**complete type**" in C. #Cpp_C_difference  #Cpp98-03 
 
 Let's think about a situation. Our enum definition is inside a header file. We don't want to include that header instead, we want to make a forward declaration of the enum.
 
@@ -246,7 +246,9 @@ If the underlying type of the enum is known, the need to add the header file wou
 So the "enum class" was added to the language with modern C++ to cover these problems. And also added some syntax features to enums, too. #Cpp11 
 ## enum class
 Differences of enum class:
-1. Underlying type can be stated directly with syntax. If we didn't state the underlying type, it would be "int" by default. That means underlying type of the enum classes is not determined by the compiler anymore. That solves the problems that we mentioned about forward declaration. And we can determine underlying type of the enum class types as smaller integer types such as char, short, unsigned short etc. Underlying determine feature is also added to the classical enums, not only to enum classes. This solves forward declaration for classical enums, too. This also solves the portability issues. #Cpp11 
+1. Underlying type can be stated directly with syntax. If we didn't state the underlying type, it would be "int" by default. That means the underlying type of the enum classes is not determined by the compiler anymore. That solves the problems that we mentioned about forward declaration. We can determine the underlying type of the enum class types as smaller integer types such as char, short, unsigned short, etc. The underlying determine feature is also added to the classical enums, not only to enum classes. This solves forward declaration for classical enums, too. This also solves the portability issues. #Cpp11 
+
+> [!warning]  Warning: The stating the underlying type was added to the classical enums. However, the underlying type of the classical enum won't be the "int" by default if we don't state the underlying type, this feature only exists with enum classes. So, the forward declaration of a classical enum without specifying the underlying type is still an incomplete type (for example, "enum Color;").
 
 ```cpp
 enum class Color {red, blue, green}; // underlying type: default int
@@ -255,7 +257,7 @@ enum class Color : char{red, blue, green}; // We can state the underlying type
 ----
 enum class Color : unsigned{red, blue, green}; // We can state the underlying type
 ----
-enum class Color: int; // Forward decleration example. The rules existed for classical enums too
+enum class Color : int; // Forward decleration example. The rules existed for classical enums too
 ----
 enum Color : unsigned{red, blue, green}; // We can state the underlying type
 ```
@@ -291,7 +293,7 @@ Some using-keywords correspond to different meanings. The keyword is one of the 
 3. There is NO implicit type conversion from enum classes to arithmetic types.
 
 **The added features to the classical enums with modern C++**: #Cpp11 
-1. Specifying the underlying type of the classical enums. (The default underlying type has become "int" for classical enums too with the modern C++, which solves the forward declaration problem)
+1. Specifying the underlying type of the classical enums.
 2. We can use classical enums with the resolution operator just like enum classes. This does not have an effect, it is added just to make the syntax the same. (For example: "auto x = Color::red", Color is a classical enum)
 
 Use the enum classes if there is no special situation to use the classical enums.
@@ -310,6 +312,27 @@ int main()
 {
 	constexpr boo1 b = is_class_v<Color>; // This is false
 }
+```
+
+## Forward Declaration of Enums (C++11)
+BCC32 introduces forward declaration of enums. You can declare an enumeration without providing a list of enumerators. Such declarations would not be definitions and can be provided only for enumerations with fixed underlying types. An enumeration can then be re-declared, possibly providing the missing list of enumerators, but the re-declaration must match the previous declaration. This feature is one of the C++11 features added to BCC32.
+
+```cpp
+enum E : short;           // OK: unscoped, underlying type is short
+enum F:                   // illegal: enum-base is required
+enum class G : short      // OK: scoped, underlying type is short
+enum class H;             // OK: scoped, underlying type is int
+enum E : short;           // OK: redeclaration of E
+enum class G : short;     // OK: redeclaration of G
+enum class H;             // OK: redeclaration of H
+enum class H : int;       // OK: redeclaration of H
+enum class E : short;     // illegal: previously declared as unscoped
+enum G : short;           // illegal: previously declared as scoped
+enum E;                   // illegal: enum-base is required
+enum E : int              // illegal: different underlying type
+enum class G;             // illegal: different underlying type
+enum class H : short;     // illegal: different underlying type
+enum class H {/* */}]     // OK:  this redeclaration is a definition
 ```
 # decltype Specifier
 #Cpp_decltype
