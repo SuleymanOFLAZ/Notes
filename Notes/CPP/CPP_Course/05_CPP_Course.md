@@ -24,11 +24,11 @@ These purposes are:
 
 > [!note] Note: With brace (uniform) initialization the compiler throws an error, if a data loss occurs.
 
->We have four new type-cast operators in C++. These are keywords also. #Cpp_keyword_typecast
-> - **static_cast**
-> - **const_cast**
-> - **reinterpret_cast**
-> - **dynamic_cast**
+We have four new type-cast operators in C++. These are keywords also. #Cpp_keyword_typecast
+ - **static_cast**
+ - **const_cast**
+ - **reinterpret_cast**
+ - **dynamic_cast**
 
 > [!note] Note: These are standard type-cast operators. Libraries can have more type-cast operators.
 

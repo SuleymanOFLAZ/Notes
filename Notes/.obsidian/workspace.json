@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "CPP/CPP_Course/05_CPP_Course.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               }
             }
@@ -181,8 +181,9 @@
   },
   "active": "218e304dc05115d4",
   "lastOpenFiles": [
-    "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
+    "CPP/CPP_Course/06_CPP_Course.md",
     "CPP/CPP_Course/05_CPP_Course.md",
+    "CPP/CPP_Course/Additional_Notes/Repeat_Count.md",
     "CPP/Home.md",
     "CPP/CPP_Course/15_CPP_Course.md",
     "CPP/CPP_Course/Additional_Notes/Look_Later_Subjects.md",
@@ -202,7 +203,6 @@
     "C",
     "Python",
     "D&A",
-    "CPP/CPP_Course/06_CPP_Course.md",
     "CPP/CPP_Course/02_CPP_Course.md",
     "CPP/CPP_Course/01_CPP_Course.md",
     "CPP/CPP_Topics/Drawings/001_AnatomyOfVector.md",
