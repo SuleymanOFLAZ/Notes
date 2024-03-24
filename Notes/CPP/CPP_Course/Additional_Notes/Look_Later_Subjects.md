@@ -52,3 +52,5 @@
 - SOLID Principle
 - std::deque class
 - std::map class
+- std::bind
+- closure object
