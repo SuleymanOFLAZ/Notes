@@ -752,10 +752,10 @@ int main()
 
 > [!question] Question: Is the following code legal? What is the value of "x"? #Cpp_Interview_Question 
 > A: The code is legal because the "operator bool" function is not explicit. Therefore the class objects inside the "m1 + m2" expression are converted into bool type. The compiler turns the expression "m1 + m2" into the expression "m1.operator boo() + m2.operator bool()". The value of "x" is "2" because the "operator bool" function returns 1 for each object. The type of the "x" is deducted as "int" because of the integral promotion. The type of expression that adds two "bool" is "int". #Cpp_IntegralPromotion 
-> Note: The syntax in line 16 is valid even if the addition operator function does not exist because the objects are converted into booleans and them added.
+> Note: The syntax in line 16 is valid even if the addition operator function does not exist because the objects are converted into booleans and then added.
 
 ```cpp
-clas Myclass {
+class Myclass {
 public:
 	Myclass(int val) : mval{val} {}
 	operator bool()const
@@ -775,6 +775,96 @@ int main()
 	std::cout << "x = " << x << "\n"; // The value of "x" is 2 because the "operator bool" function returns 1 for each object.
 }
 ```
+
+> [!question] Question: The following code prints the hex value of the given input and terminates when a non-number character is entered. How does this code work?
+> A: The class that "cin" belongs to has an "operator bool" function. There is another operator overloading in the expression inside the while parentheses. The operator ">>" is overloaded. The compiler converts the expression "cin >> x" into the "cin.operator>> (x)". The type of the expression "cin.operator>>(x)" (which is inside the while parentheses) is "istream" because the return of it is "iostream&". However, the compiler looks for if it can convert it into a bool because it was used in a logical context. And, the compiler can convert it into the bool because the class has the "operator bool" function. Therefore the final expression that is converted by the compiler is "cin.operator>>(x).operator bool()". The type of the final expression is the bool.
+> The "operator bool" returns true if the stream is in good condition. If the stream is in fail state, the function returns false. Therefore, if the input characters (inside the standard input buffer) are not characters that a decimal number is obtained, cin comes into the failure state, thus the "operator bool" function returns false.
+
+```cpp
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+
+	int x;
+
+	while(cin >> x)
+	{
+		cout << hex << x << '\n';
+	}
+}
+```
+
+> [!question] Question: Why is line 9 in the below code a syntax error?
+> A: Because the "operator bool" function is explicit.
+
+```cpp error:ERROR
+#include <iostream>
+
+int main()
+{
+	using namespace std;
+
+	bool flag;
+
+	flag = cin; // Syntax ERROR because the "operator bool" function is explicit.
+}
+```
+
+> [!question] Question: Is there a syntax error in the below code?
+> A: No, there isn't. Because both the "cin" and "cout" have the "operator bool" function. And they are used inside the logic content.
+
+```cpp
+#include <iostream>
+
+int main()
+{
+	if(cin && cout)
+	{
+	}
+}
+```
+
+> [!note] Note: The "operator bool" function was added to the language with C++11. It was "operator void\*" before the C++11. #Cpp11 #Cpp98-03 
+# Quick Reminder About The Type of A Name and Type of An Expression
+
+```cpp
+int main()
+{
+	int x = 10;
+	int& r =x;
+}
+```
+
+What is the type of "r" in the upper example?
+A: This means the type of name that is introduced as "r". It means the type of entity a noun refers to. The type of "r" is "int&".  The decltype does this job. If we write "decltype(r)" the result of it will be "int&". #Cpp_decltype 
+
+"r" is an expression also and each expression has a type. What is the type of the expression "r"?
+A: There are two important qualifying of an expression. These are "data type" and "value category".
+
+What is the data type of the expression "r"?
+A: The data type of the expression "r" is "int" (not "int&"). A type of expression can be a reference type in C++.
+
+What is the value category of the expression "r"? #Cpp_ValueCategory 
+A: L-value.
+
+```cpp
+int main()
+{
+	int x = 10;
+	int&& r = x+5;
+}
+```
+
+What is the type of "r" in the upper example?
+A: "int&&"
+
+What is the data type of the expression "r"?
+A: "int"
+
+What is the value category of the expression "r"?
+A: "L-value."
 
 ---
 # Terms
